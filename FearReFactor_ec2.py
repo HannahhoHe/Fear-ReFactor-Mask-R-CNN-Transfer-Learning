@@ -68,7 +68,7 @@ bestResolutionVideo = video.getbest()
 st.write(f'Title:  {bestResolutionVideo.filename}')
 
 st.markdown("### 🎲 What are afraid of?")
-phobia = st.selectbox("Select your phobia: ", ['clown', 'dog', 'teddy bear'])
+phobia = st.selectbox("Select your phobia: ", ['clown', 'dog', 'teddy bear', 'bird'])
 
 st.markdown("### 🎲 Select Video Fragment" + "  ")
 sec1 = st.number_input("START /Sec", value=50, key = 0)
@@ -78,11 +78,10 @@ st.write(f'Estimate: {minutes} minutes')
 
 
 
-fps = 3  #fps = 30
-MaxCount = (sec2 - sec1)*1  #30
-n_images = MaxCount-2          
+fps = 30  #fps = 30
+MaxCount = (sec2 - sec1)*30  #30
+n_images = MaxCount-1 
 
-count=1
 
 # This part is running R-CNN
 ##################################################################################################################################
@@ -92,15 +91,7 @@ def download():
     bestResolutionVideo = video.getbest()
     bestResolutionVideo.download()
 
-# video - to -images 
-def getFrame(sec):
-    vidcap = cv2.VideoCapture(bestResolutionVideo.filename)
-    vidcap.set(cv2.CAP_PROP_POS_MSEC,sec*1000)   #set the capturing start at (sec*1000 milliseconds)
-    hasFrames,image = vidcap.read()
-    if hasFrames:
-        SavePath = '/home/ubuntu/FobiaPhilter/ActionFiles/FramesFromVideo/images/'
-        cv2.imwrite(SavePath + "image"+str(count)+".jpg", image)     # save frame as JPG file
-    return hasFrames
+
 
 # audio edits
 def audio(sec, MaxCount):
@@ -303,6 +294,11 @@ class InferenceConfig(coco.CocoConfig):
     IMAGES_PER_GPU = 1
     DETECTION_MIN_CONFIDENCE = 0.01
     
+class InferenceConfigOrig(coco.CocoConfig):  
+    GPU_COUNT = 1
+    IMAGES_PER_GPU = 1
+        
+    
 def check_for_overlap(rectangle_a, rectangle_b):
     if(rectangle_a[0]>rectangle_b[2] or rectangle_a[1]>rectangle_b[3]):
         a = 'n'
@@ -360,24 +356,53 @@ def plot_predicted_new(dataset, model, model2, cfg, cfg2, class_names, class_nam
         display_instances_cust(image, r2['rois'], r2['masks'],  r2['class_ids'], class_names2, scores=False, imagecount=i,
         show_bbox=False, captions=False, show_mask=False) 
         
+
+        
+def plot_predicted_coco(dataset, model3, cfg3, class_names2, n_images, phobia): 
+    for i in range(n_images):
+        image = dataset.load_image(i)
+
+        #coco model 
+        scaled_image = mold_image(image, cfg3)
+        sample = expand_dims(scaled_image, 0)               
+        yhat2 = model3.detect(sample, verbose=1)[0]     
+        r2 = yhat2
+
+        #condition               
+        for coco in range(r2['masks'].shape[-1]):
+            if class_names2[r2['class_ids'][coco]] == phobia:
+                mask = r2['masks'][:, :, coco]
+                image[mask] = 200
+            else:
+                pass
+
+        display_instances_cust(image, r2['rois'], r2['masks'],  r2['class_ids'], class_names2, scores=False, imagecount=i,
+        show_bbox=False, captions=False, show_mask=False) 
+
         
 def Modelmain():
-        test_set = ClownDataset()
-        test_set.load_dataset('/home/ubuntu/FobiaPhilter/ActionFiles/FramesFromVideo', is_train=False)
-        test_set.prepare()
-        cfg = PredictionConfig()  
-        
-        model_path = '/home/ubuntu/FobiaPhilter/ActionFiles/model/mask_rcnn_clown_cfg_0025.h5'
-        model = MaskRCNN(mode='inference', model_dir='./', config=cfg)
-        model.load_weights(model_path, by_name=True)
-        
-        
-        cfg2 = InferenceConfig()
-        weights_path = '/home/ubuntu/FobiaPhilter/ActionFiles/model/mask_rcnn_coco.h5'
-        model2 = MaskRCNN(mode='inference', model_dir='./', config=cfg2)
-        model2.load_weights(weights_path, by_name=True)
+    test_set = ClownDataset()
+    test_set.load_dataset('/home/ubuntu/FobiaPhilter/ActionFiles/FramesFromVideo', is_train=False)
+    test_set.prepare()
+    cfg = PredictionConfig()  
+
+    model_path = '/home/ubuntu/FobiaPhilter/ActionFiles/model/mask_rcnn_clown_cfg_0025.h5'
+    model = MaskRCNN(mode='inference', model_dir='./', config=cfg)
+    model.load_weights(model_path, by_name=True)
+
+
+    cfg2 = InferenceConfig()
+    cfg3 = InferenceConfigOrig()    
+    weights_path = '/home/ubuntu/FobiaPhilter/ActionFiles/model/mask_rcnn_coco.h5'
+    
+    model2 = MaskRCNN(mode='inference', model_dir='./', config=cfg2)
+    model2.load_weights(weights_path, by_name=True)
+    
+    model3 = MaskRCNN(mode='inference', model_dir='./', config=cfg3)
+    model3.load_weights(weights_path, by_name=True)
+            
+    if phobia == 'clown': 
         plot_predicted_new(test_set, model, model2, cfg, cfg2, class_names, class_names2, n_images)
-        
         
         #Export imageID vs. original Filename
         files = []
@@ -389,6 +414,24 @@ def Modelmain():
         df['Original_files'] = df['Original_files'].str.replace('dataset.image','').astype('int64')
         df = df.sort_values(by=['Original_files'])
         df.to_csv('/home/ubuntu/FobiaPhilter/ActionFiles/TestSampleImageID.txt')
+            
+    elif phobia != 'clown':   
+        plot_predicted_coco(test_set, model3, cfg3, class_names2, n_images,  phobia)
+        
+        #Export imageID vs. original Filename
+        files = []
+        for m in test_set.image_from_source_map:
+            files.append(m)
+
+        df = pd.DataFrame({'Original_files':files})
+        df['Index_outputFile'] = df.index
+        df['Original_files'] = df['Original_files'].str.replace('dataset.image','').astype('int64')
+        df = df.sort_values(by=['Original_files'])
+        df.to_csv('/home/ubuntu/FobiaPhilter/ActionFiles/TestSampleImageID.txt')
+        
+    else:
+        pass 
+    
 
 # convert images to videos
 def convertImageToVideo():
@@ -399,10 +442,13 @@ def convertImageToVideo():
     frame_array = []
     for file in df_filename_imageID['Index_outputFile']:
         filename = pathIn + str(file) +'.jpg'
-        img = cv2.imread(filename)
-        height, width, layers = img.shape
-        size = (width,height)
-        frame_array.append(img)
+        try:
+            img = cv2.imread(filename)
+            height, width, layers = img.shape
+            size = (width,height)
+            frame_array.append(img)
+        except:
+            pass
     out = cv2.VideoWriter(pathOut,cv2.VideoWriter_fourcc(*'DIVX'), 1/fps, size)
     for i in range(len(frame_array)):
         out.write(frame_array[i])
@@ -421,6 +467,19 @@ def main():
     
     sec = sec1 
     count=1
+    
+    
+    # video - to -images 
+    def getFrame(sec):
+        vidcap = cv2.VideoCapture(bestResolutionVideo.filename)
+        vidcap.set(cv2.CAP_PROP_POS_MSEC,sec*1000)   #set the capturing start at (sec*1000 milliseconds)
+        hasFrames,image = vidcap.read()
+        if hasFrames:
+            SavePath = '/home/ubuntu/FobiaPhilter/ActionFiles/FramesFromVideo/images/'
+            cv2.imwrite(SavePath + "image"+str(count)+".jpg", image)     # save frame as JPG file
+        return hasFrames
+        
+    
     success = getFrame(sec)
     while success:
         while (count < MaxCount):
@@ -477,21 +536,21 @@ if st.button('Run & Share'):
 # To play video (! if running in aws, there won't be audio!)
 def playVideo():    
     video_path = '/home/ubuntu/FobiaPhilter/ActionFiles/videoConstruct1.mp4' 
-    #audio_path = "/home/ubuntu/FobiaPhilter/audio.mp4"
+    audio_path = "/home/ubuntu/FobiaPhilter/audio.mp4"
     video = cv2.VideoCapture(video_path)
-    #player = MediaPlayer(audio_path)
+    player = MediaPlayer(audio_path)
     while True:
         grabbed, frame=video.read()
-        #audio_frame, val = player.get_frame()
+        audio_frame, val = player.get_frame()
         if not grabbed:
             print("End of video")
             break
         if cv2.waitKey(5) & 0xFF == ord("q"):
             break
         cv2.imshow("Video", frame)
-        #if val != 'eof' and audio_frame is not None:
+        if val != 'eof' and audio_frame is not None:
             #audio
-            #img, t = audio_frame
+            img, t = audio_frame
     video.release()
     cv2.destroyAllWindows()
     
@@ -503,21 +562,21 @@ if st.button('PLAY'):
     
 def playDemo(path):    
     video_path = path + 'videoConstruct1.mp4' 
-    #audio_path = path + "audio.mp4"
+    audio_path = path + "audio.mp4"
     video = cv2.VideoCapture(video_path)
-    #player = MediaPlayer(audio_path)
+    player = MediaPlayer(audio_path)
     while True:
         grabbed, frame=video.read()
-        #audio_frame, val = player.get_frame()
+        audio_frame, val = player.get_frame()
         if not grabbed:
             print("End of video")
             break
         if cv2.waitKey(5) & 0xFF == ord("q"):
             break
         cv2.imshow("Video", frame)
-        #if val != 'eof' and audio_frame is not None:
+        if val != 'eof' and audio_frame is not None:
             #audio
-            #img, t = audio_frame
+            img, t = audio_frame
     video.release()
     cv2.destroyAllWindows()
     
