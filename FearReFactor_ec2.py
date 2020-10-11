@@ -296,10 +296,12 @@ class PredictionConfig(Config):
     NUM_CLASSES = 1 + 3
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
+    DETECTION_MIN_CONFIDENCE = 0.01
     
 class InferenceConfig(coco.CocoConfig):  
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
+    DETECTION_MIN_CONFIDENCE = 0.01
     
 def check_for_overlap(rectangle_a, rectangle_b):
     if(rectangle_a[0]>rectangle_b[2] or rectangle_a[1]>rectangle_b[3]):
