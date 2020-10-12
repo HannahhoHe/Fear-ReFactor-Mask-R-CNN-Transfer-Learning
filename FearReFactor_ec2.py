@@ -56,6 +56,7 @@ from pytube import YouTube
 from moviepy.editor import *
 import smtplib
 from email.mime.text import MIMEText
+import moviepy.editor as mpe
 import boto3
 
 
@@ -458,7 +459,12 @@ def convertImageToVideo():
     return out
     
     
-
+def combine_audio(vidname, audname, outname, fps=30):
+    import moviepy.editor as mpe
+    my_clip = mpe.VideoFileClip(vidname)
+    audio_background = mpe.AudioFileClip(audname)
+    final_clip = my_clip.set_audio(audio_background)
+    final_clip.write_videofile(outname,fps=fps)
 
     
 #############################################
@@ -495,13 +501,13 @@ def main():
     audio(sec, MaxCount)        
     Modelmain()
     convertImageToVideo()
+    combine_audio('/home/ubuntu/FobiaPhilter/ActionFiles/videoConstruct1.mp4', 'audio.mp3', f'{bestResolutionVideo.filename}')
     
     s3 = boto3.resource('s3')
-    s3.meta.client.upload_file('/home/ubuntu/FobiaPhilter/ActionFiles/videoConstruct1.mp4', 
+    s3.meta.client.upload_file(f'/home/ubuntu/FobiaPhilter/{bestResolutionVideo.filename}', 
                                'vidobject', f'FearReFactor/{bestResolutionVideo.filename}')
-    s3.meta.client.upload_file('/home/ubuntu/FobiaPhilter/audio.mp3', 
-                               'vidobject', f'FearReFactor/audio.mp3')
     
+
     
     return
     
@@ -520,9 +526,7 @@ def emailResults(TO):
     FROM = 'dr.hehannah@gmail.com'
     
     URL = f'https://vidobject.s3-us-west-2.amazonaws.com/FearReFactor/{bestResolutionVideo.filename}'
-    audioURL = f'https://vidobject.s3-us-west-2.amazonaws.com/FearReFactor/audio.mp3'
-    message = 'Subject: {}\n\n{}'.format('Fear ReFactor', f'Your request is ready. Click to {URL} and for sound, {audioURL}
-                                         to play use ffmpeg -i {URL} -i {audioURL} -c copy output.mp4')
+    message = 'Subject: {}\n\n{}'.format('Fear ReFactor', f'Your request is ready. Click to {URL}')
     
     
     # SMTP
