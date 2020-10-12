@@ -95,10 +95,12 @@ def download():
 
 # audio edits
 def audio(sec, MaxCount):
-    a = sec
-    b = (MaxCount/30) + sec
+    a = sec1
+    b = sec2
     audio_cut = VideoFileClip(bestResolutionVideo.filename).subclip(a,b)
-    audio_cut.write_videofile('audio.mp4', audio=True)
+    audioclip = audio_cut.audio
+    audioclip.write_audiofile('audio.mp3')
+
 
 
 # Run MRCNN 
@@ -449,7 +451,7 @@ def convertImageToVideo():
             frame_array.append(img)
         except:
             pass
-    out = cv2.VideoWriter(pathOut,cv2.VideoWriter_fourcc(*'DIVX'), 1/fps, size)
+    out = cv2.VideoWriter(pathOut,cv2.VideoWriter_fourcc(*'DIVX'), fps, size)
     for i in range(len(frame_array)):
         out.write(frame_array[i])
     out.release()
@@ -497,6 +499,8 @@ def main():
     s3 = boto3.resource('s3')
     s3.meta.client.upload_file('/home/ubuntu/FobiaPhilter/ActionFiles/videoConstruct1.mp4', 
                                'vidobject', f'FearReFactor/{bestResolutionVideo.filename}')
+    s3.meta.client.upload_file('/home/ubuntu/FobiaPhilter/audio.mp3', 
+                               'vidobject', f'FearReFactor/audio.mp3')
     
     
     return
@@ -516,7 +520,9 @@ def emailResults(TO):
     FROM = 'dr.hehannah@gmail.com'
     
     URL = f'https://vidobject.s3-us-west-2.amazonaws.com/FearReFactor/{bestResolutionVideo.filename}'
-    message = 'Subject: {}\n\n{}'.format('Fear ReFactor', f'Your request is ready. Click to {URL}')
+    audioURL = f'https://vidobject.s3-us-west-2.amazonaws.com/FearReFactor/audio.mp3'
+    message = 'Subject: {}\n\n{}'.format('Fear ReFactor', f'Your request is ready. Click to {URL} and for sound, {audioURL}
+                                         to play use ffmpeg -i {URL} -i {audioURL} -c copy output.mp4')
     
     
     # SMTP
@@ -536,7 +542,7 @@ if st.button('Run & Share'):
 # To play video (! if running in aws, there won't be audio!)
 def playVideo():    
     video_path = '/home/ubuntu/FobiaPhilter/ActionFiles/videoConstruct1.mp4' 
-    audio_path = "/home/ubuntu/FobiaPhilter/audio.mp4"
+    audio_path = "/home/ubuntu/FobiaPhilter/audio.mp3"
     video = cv2.VideoCapture(video_path)
     player = MediaPlayer(audio_path)
     while True:
@@ -562,7 +568,7 @@ if st.button('PLAY'):
     
 def playDemo(path):    
     video_path = path + 'videoConstruct1.mp4' 
-    audio_path = path + "audio.mp4"
+    audio_path = path + "audio.mp3"
     video = cv2.VideoCapture(video_path)
     player = MediaPlayer(audio_path)
     while True:
