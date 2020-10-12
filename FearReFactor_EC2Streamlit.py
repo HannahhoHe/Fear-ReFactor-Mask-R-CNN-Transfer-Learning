@@ -532,7 +532,7 @@ def emailResults(TO):
     # SMTP
     send = smtplib.SMTP('smtp.gmail.com', 587)
     send.starttls()
-    send.login("fearrefactorphobia@gmail.com", "nofearatall")
+    send.login() #need to provide 
     send.sendmail(FROM, TO, message)
     send.quit()
     
