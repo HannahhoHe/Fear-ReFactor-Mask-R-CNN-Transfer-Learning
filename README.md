@@ -1,9 +1,9 @@
 # Fear ReFactor
-[Insight Data Science](https://insightfellows.com/data-science) Project - OCT 2020
+Fear ReFactor is a web app that masks phobia objects for YouTube videos. Currently, the specific objects, 'clown', 'dog', 'bird', and 'teddy bear' are available.
+Notice that Fear ReFactor requires GPU to run properly. If you prefer to run the streamlit app in your local computer, use this code [FearReFactor_streamlit_pub.py](https://github.com/HannahhoHe/Fear-ReFactor-Mask-R-CNN-Transfer-Learning/blob/master/FearReFactor_streamlit_pub.py) and don't forget to type in your email login credentials (line 526 and line 535). Otherwise, the [streamlit web app](https://52.34.156.240:8501) is deployed on AWS EC2 - p2 instance.  
 
-## Description
-This repo uases [matterport/Mask_RCNN](https://github.com/matterport/Mask_RCNN) to create a web app 'Fear ReFactor' to mask phobia objects in YouTube videos.
-In this project, I focus on 'clown' object by performing a transfer learning on Mask R-CNN. 
+This repo focuses on building a model to detect and mask ALL 'clown' objects in a video. To achieve this, I performed a transfer learning with [matterport/Mask_RCNN](https://github.com/matterport/Mask_RCNN).  
+
 
 
 
