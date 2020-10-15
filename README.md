@@ -12,7 +12,7 @@ This repo focuses on building a model to detect and mask ALL 'clown' objects thr
 Fear ReFactor takes every frame from the video, running through the Mask R-CNN models built in this repo, and re-constructs all the processed frames to a video, stored in Amazon S3 bucket. Every processed video should have the clown object completely masked. [This code](https://github.com/HannahhoHe/Fear-ReFactor-Mask-R-CNN-Transfer-Learning/blob/master/vid-im.ipynb) includes the process of parsing video and audio frames, and constructing and playing a video.    
 
 <p align="center">
-  <img align="middle" width="450" src="flow.PNG">
+  <img align="middle" width="700" src="flow.PNG">
 </p>
 
 # Building up Mask R-CNN models 
@@ -22,5 +22,5 @@ Since clown is a complicated object which shares the same feature as a person as
 
 
 <p align="center">
-  <img align="middle" width="450" src="Mask_determination.PNG">
+  <img align="middle" width="700" src="Mask_determination.PNG">
 </p>
