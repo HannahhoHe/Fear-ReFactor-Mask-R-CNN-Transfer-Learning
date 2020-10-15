@@ -22,6 +22,5 @@ Since clown is a complicated object which shares the same feature as a person as
 
 
 <p align="center">
-  <img align="left" width="200" src="clown_model.PNG">
-  <img align="middle" width="200" src="pretrained_coco_model.PNG">
+  <img align="middle" width="450" src="Mask_determination.PNG">
 </p>
