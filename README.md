@@ -16,3 +16,4 @@ Fear ReFactor takes every frame from the video, running through the Mask R-CNN m
 </p>
 
 # Building up Mask R-CNN models
+- Scrape Google/YouTube images and annotate the training dataset 
