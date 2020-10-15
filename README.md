@@ -5,7 +5,7 @@ Notice that Fear ReFactor requires GPU to run properly. If you prefer to run the
 This repo focuses on building a model to detect and mask ALL 'clown' objects in a video. To achieve this, I performed a transfer learning with [matterport/Mask_RCNN](https://github.com/matterport/Mask_RCNN).  
 
 
-[![alt text](https://github.com/HannahhoHe/Fear-ReFactor-Mask-R-CNN-Transfer-Learning/blob/master/front.PNG)](https://github.com/HannahhoHe/Fear-ReFactor-Mask-R-CNN-Transfer-Learning/blob/master/Best%20Clown%20Pranks%20Compilation%202018.mp4 "title")
+[![alt text](https://github.com/HannahhoHe/Fear-ReFactor-Mask-R-CNN-Transfer-Learning/blob/master/front.PNG)](https://github.com/HannahhoHe/Fear-ReFactor-Mask-R-CNN-Transfer-Learning/blob/master/gif_small.gif "title")
 
 [original](https://www.youtube.com/watch?v=GGOMD2DlJUY&t=107s)
 
