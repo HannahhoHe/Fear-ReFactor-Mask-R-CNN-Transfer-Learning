@@ -7,7 +7,7 @@ This repo focuses on building a model to detect and mask ALL 'clown' objects in 
 
 ![alt text](gif_small.gif)
 
-<img src="gif_small.gif" width="48">
+<img src="gif_small.gif" width="150">
 
 [original](https://www.youtube.com/watch?v=GGOMD2DlJUY&t=107s)
 
