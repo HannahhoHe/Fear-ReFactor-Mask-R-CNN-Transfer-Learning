@@ -5,7 +5,7 @@ Notice that Fear ReFactor requires GPU to run properly. If you prefer to run the
 This repo focuses on building a model to detect and mask ALL 'clown' objects in a video. To achieve this, I performed a transfer learning with [matterport/Mask_RCNN](https://github.com/matterport/Mask_RCNN).  
 
 
-<video src="Best Clown Pranks Compilation 2018.mp4" poster="front.png" width="320" height="200" controls preload></video>
+![Farmers Market Finder Demo](demo/git_small.gif)
 
 [original](https://www.youtube.com/watch?v=GGOMD2DlJUY&t=107s)
 
