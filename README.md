@@ -7,6 +7,7 @@ This repo focuses on building a model to detect and mask ALL 'clown' objects in 
 
 
 [![SC2 Video](https://img.youtube.com/vi/--b-9HrKK6w/0.jpg)](https://gifs.com/gif/wVBjYw)
+[![SC2 Video](doc/SC2_youtube.gif)](https://www.youtube.com/watch?v=--b-9HrKK6w)
 
 [original](https://www.youtube.com/watch?v=GGOMD2DlJUY&t=107s).
 
