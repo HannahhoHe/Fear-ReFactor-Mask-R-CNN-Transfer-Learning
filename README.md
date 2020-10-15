@@ -16,4 +16,4 @@ Fear ReFactor takes every frame from the video, running through the Mask R-CNN m
 </p>
 
 # Building up Mask R-CNN models
-In this repo, I scraped images from google images using Google Selenium, [see the code](https://github.com/HannahhoHe/Fear-ReFactor-Mask-R-CNN-Transfer-Learning/blob/master/google-im.ipynb) as well as from YouTube images.    
+To prepare training images, I scraped static images and YouTube images. [This code](https://github.com/HannahhoHe/Fear-ReFactor-Mask-R-CNN-Transfer-Learning/blob/master/google-im.ipynb) shows how to use Google Selenium and headless Chrome in AWS EC2.    
