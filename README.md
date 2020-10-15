@@ -6,7 +6,7 @@ This repo focuses on building a model to detect and mask ALL 'clown' objects in 
 
 
 
-[![SC2 Video](https://img.youtube.com/vi/--b-9HrKK6w/0.jpg)](https://github.com/HannahhoHe/Fear-ReFactor-Mask-R-CNN-Transfer-Learning/blob/master/Best%20Clown%20Pranks%20Compilation%202018.mp4)
+[![SC2 Video](https://img.youtube.com/vi/--b-9HrKK6w/0.jpg)](https://drive.google.com/drive/my-drive)
 
 [original](https://www.youtube.com/watch?v=GGOMD2DlJUY&t=107s).
 
