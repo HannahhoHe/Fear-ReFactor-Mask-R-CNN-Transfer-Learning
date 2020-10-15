@@ -10,5 +10,5 @@ This repo focus on building a model to detect and mask ALL 'clown' objects in a 
 
 ## Workflow
 <p align="center">
-  <img align="middle" width="450" src="flow.png">
+  <img align="middle" width="450" src="flow.PNG">
 </p>
