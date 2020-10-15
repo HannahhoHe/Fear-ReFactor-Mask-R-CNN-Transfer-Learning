@@ -8,7 +8,9 @@ This repo focus on building a model to detect and mask ALL 'clown' objects in a 
   <img align="middle" width="450" src="gif_small.gif">
 </p>
 
-## Workflow
+# Workflow
+Fear ReFactor takes every frame from the video, running through the Mask R-CNN models built in this repo, and then re-constructs all the processed frames to a 3D video, stroed in Amazon S3 bucket. All the processed video frames should have every clown object completely masked. [This code](https://github.com/HannahhoHe/Fear-ReFactor-Mask-R-CNN-Transfer-Learning/blob/master/vid-im.ipynb) includes the process of parsing image frames and audio from a YouTube video, and reconstructing and playing the final video.    
+
 <p align="center">
   <img align="middle" width="450" src="flow.PNG">
 </p>
