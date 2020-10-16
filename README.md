@@ -5,7 +5,7 @@ Notice that Fear ReFactor requires GPU to run properly. If you prefer to run thi
 This repo focuses on building a model to detect and mask ALL 'clown' objects throughout a YouTube video. To achieve this, I performed transfer learning with [matterport/Mask_RCNN](https://github.com/matterport/Mask_RCNN). Below is a post-masked clown video from [YouTube](https://www.youtube.com/watch?v=GGOMD2DlJUY&t=107s).  
 
 <p align="center">
-  <img align="middle" width="450" src="https://media.giphy.com/media/JKNU8C5W2Iotqi86Zo/giphy.gif">
+  <img align="middle" width="450" src="gif_small.gif">
 </p>
 
 # Fear ReFactor Workflow
